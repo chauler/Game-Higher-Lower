@@ -22,24 +22,35 @@ export default function GameData({ appid }: { appid: number }) {
 
   return (
     <>
-      <div className="flex w-[110%] flex-col bg-slate-500/50">
-        <div className="h-8"></div>
-        <p className="text-2xl text-white">
-          {gameDataQuery.data
-            ? gameDataQuery.data?.name
-            : "Loading tRPC query..."}
-        </p>
+      <div className="flex w-[110%] flex-col rounded-lg bg-slate-500/50">
+        <div className="flex place-content-center">
+          <p className="text-3xl text-white">
+            {gameDataQuery.data
+              ? gameDataQuery.data?.name
+              : "Loading tRPC query..."}
+          </p>{" "}
+        </div>
+        <div className="h-2"></div>
         <Image
           className="rounded-lg"
           src={gameDataQuery?.data?.image ?? ""}
           alt={""}
+          width={500}
+          height={250}
         />
-        <div className="h-8"></div>
-        <p className="text-2xl text-white">
-          {gameDataQuery
-            ? gameDataQuery.data?.playerCount
-            : "Loading tRPC query..."}
-        </p>
+        <div className="h-4"></div>
+        <div className="flex place-content-center">
+          <button className="h-12 w-[30%] rounded-lg bg-zinc-200">
+            <p className="text-slate-800">Select</p>
+          </button>
+        </div>
+        {
+          //   <p className="text-2xl text-white">
+          //   {gameDataQuery
+          //     ? gameDataQuery.data?.playerCount
+          //     : "Loading tRPC query..."}
+          // </p>
+        }
       </div>
     </>
   );
