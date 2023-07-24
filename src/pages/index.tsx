@@ -1,9 +1,14 @@
 import Head from "next/head";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import GameData from "~/Components/GameData/GameData";
-import { GameDataType } from "~/server/api/routers/steam";
 import { api } from "~/utils/api";
+
+interface RankData {
+  rank: number;
+  appid: number;
+  concurrent_in_game: number;
+  peak_in_game: number;
+}
 
 export default function Home() {
   function PickRandomId({
@@ -18,27 +23,38 @@ export default function Home() {
     if (!appListData) return;
 
     let ind = Math.floor(Math.random() * appListData.length) - 1;
-    while (
-      excludeIds.includes(appListData[ind].appid) || existingId !== undefined
-        ? Math.abs(appListData.indexOf(existingId) - ind) > maxSeparation
-        : false
-    ) {
+    let app: RankData | undefined = appListData[ind];
+
+    do {
       ind = Math.floor(Math.random() * appListData.length) - 1;
-    }
-    return appListData[ind].appid;
+      app = appListData[ind];
+      if (app === undefined) throw new TypeError("app not found");
+    } while (
+      excludeIds.includes(app.appid) || existingId !== undefined
+        ? Math.abs(
+            appListData.findIndex((value) => {
+              value.appid === existingId;
+            }) - ind
+          ) > maxSeparation
+        : false
+    );
+
+    return appListData[ind]?.appid;
   }
 
   const appListQuery = api.steam.getTopList.useQuery(undefined, {
     refetchOnWindowFocus: false,
     refetchInterval: false,
   });
-  const appListData = appListQuery.data?.response?.ranks;
+  // prettier-ignore
+  const appListData: RankData[] = (appListQuery.data as {response: {ranks: RankData[]}})?.response?.ranks;
   const [appids, setAppids] = useState<number[]>([]);
 
   useEffect(() => {
     if (appListData === undefined) return;
-    let id1 = PickRandomId({});
-    let id2 = PickRandomId({ existingId: id1 });
+    const id1 = PickRandomId({});
+    const id2 = PickRandomId({ existingId: id1 });
+    if (id1 === undefined || id2 === undefined) return;
     setAppids([id1, id2]);
   }, [appListData]);
 

@@ -18,7 +18,7 @@ export default function TextInput() {
           setInputText("");
           return;
         }
-        let value = parseInt(e.target.value);
+        const value = parseInt(e.target.value);
         Number.isNaN(value) ? 0 : updateGame(value);
       }}
     ></input>

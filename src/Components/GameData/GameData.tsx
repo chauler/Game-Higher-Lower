@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { api } from "~/utils/api";
-import { GameDataType } from "~/server/api/routers/steam";
-
-type PropType = {};
+import Image from "next/image";
 
 export default function GameData({ appid }: { appid: number }) {
   function updateGame(appid: number) {
@@ -31,10 +29,11 @@ export default function GameData({ appid }: { appid: number }) {
             ? gameDataQuery.data?.name
             : "Loading tRPC query..."}
         </p>
-        <img
+        <Image
           className="rounded-lg"
-          src={gameDataQuery ? gameDataQuery.data?.image : ""}
-        ></img>
+          src={gameDataQuery?.data?.image ?? ""}
+          alt={""}
+        />
         <div className="h-8"></div>
         <p className="text-2xl text-white">
           {gameDataQuery

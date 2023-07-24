@@ -34,10 +34,6 @@ type CreateContextOptions = Record<string, never>;
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
 const createInnerTRPCContext = (_opts: CreateContextOptions) => {
-  interface Context {
-    prisma: PrismaClient;
-    ctx?: any;
-  }
   return {
     prisma,
   };
