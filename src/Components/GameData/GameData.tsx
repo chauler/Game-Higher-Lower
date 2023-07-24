@@ -1,14 +1,26 @@
-import { useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import Image from "next/image";
+import { GameDataType } from "~/server/api/routers/steam";
 
-export default function GameData({ appid }: { appid: number }) {
+export default function GameData({
+  appid,
+  onSelect,
+  PassDataUp,
+  id,
+  children,
+}: {
+  appid: number;
+  onSelect?: (arg0: number) => unknown;
+  PassDataUp?: (arg0: number, arg1: number) => void;
+  id: number;
+  children?: ReactNode | string;
+}) {
   function updateGame(appid: number) {
     setInputText(appid.toString());
     //setAppid(appid);
   }
 
-  //const [appid, setAppid] = useState(730);
   const [inputText, setInputText] = useState(appid.toString());
   const gameDataQuery = api.steam.getPlayerStats.useQuery(
     {
@@ -19,6 +31,11 @@ export default function GameData({ appid }: { appid: number }) {
       refetchInterval: false,
     }
   );
+
+  useEffect(() => {
+    if (gameDataQuery?.data === undefined) return;
+    PassDataUp?.(gameDataQuery.data.playerCount, id);
+  }, [gameDataQuery.data]);
 
   return (
     <>
@@ -41,16 +58,18 @@ export default function GameData({ appid }: { appid: number }) {
         <div className="h-4"></div>
         <div className="flex place-content-center">
           <button className="h-12 w-[30%] rounded-lg bg-zinc-200">
-            <p className="text-slate-800">Select</p>
+            <p
+              className="font-semibold text-slate-800"
+              onClick={() => {
+                gameDataQuery.data ? onSelect?.(id) : null;
+              }}
+            >
+              Select
+            </p>
           </button>
         </div>
-        {
-          //   <p className="text-2xl text-white">
-          //   {gameDataQuery
-          //     ? gameDataQuery.data?.playerCount
-          //     : "Loading tRPC query..."}
-          // </p>
-        }
+        <p className="text-2xl text-white">{children}</p>
+        <div className="h-4"></div>
       </div>
     </>
   );
