@@ -83,8 +83,8 @@ export default function Home() {
   const appListData: RankData[] = (appListQuery.data as {response: {ranks: RankData[]}})?.response?.ranks;
   const [appids, setAppids] = useState<number[]>([]);
   const [gameData, setGameData] = useState<number[]>([]);
-  const [selected, setSelected] = useState<Boolean>(false);
-  const [result, setResult] = useState<Boolean>(false);
+  const [selected, setSelected] = useState<boolean>(false);
+  const [result, setResult] = useState<boolean>(false);
   useEffect(() => {
     if (appListData === undefined) return;
     PickIDs();
