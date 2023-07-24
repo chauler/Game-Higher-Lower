@@ -138,13 +138,13 @@ export default function Home() {
               </>
             ) : null}
           </div>
-          <button className="h-20 w-[10%] rounded-lg bg-zinc-200">
-            {selected ? (
+          {selected ? (
+            <button className="h-20 w-[10%] rounded-lg bg-zinc-200">
               <p className="font-semibold text-slate-800" onClick={Reset}>
                 Again?
               </p>
-            ) : null}
-          </button>
+            </button>
+          ) : null}
         </div>
       </main>
     </>
